@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+    <script>
+
+
+        $(document).ready(function () {
+            var user, pass;
+            $("#submit").click(function () {
+                user = $("#username").val();
+                pass = $("#password").val();
+                console.log(user);
+                console.log(pass);
+                $.post("http://localhost:3000", { username: user, password: pass }, function (data) {
+                    //console.log(data);
+                    localStorage.setItem("token", data.access_token)
+
+
+                });
+            });
+        });
+
+
+        //document.cookie = "token&{token}"
+    </script>
+
+</head>
+
+<body>
+    <div class="login">
+        <h1>Login</h1>
+        <div>
+            <label for="Inregistrare">
+                <!-- font awesome icon -->
+                <i class="fas fa-user"></i>
+            </label>
+            <input type="text" name="username" placeholder="Username" id="username" required>
+            <label for="password">
+                <i class="fas fa-lock"></i>
+            </label>
+            <input type="password" name="password" placeholder="Password" id="password" required>
+            <button type="button" id="submit" value="Login"> Login</button>
+        </div>
+    </div>
+
+    <a href="/exemplu">Apasă aici după logare</a>
+</body>
+
+</html>
