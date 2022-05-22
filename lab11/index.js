@@ -6,21 +6,23 @@ const dotenv = require('dotenv');
 const cookieParser = require("cookie-parser");
 
 
-
+//Am modificat codul primit la laborator pentru a crea un jwt token din site
+// si nu din linia de comanda
 
 
 const app = express();
 const PORT = 3000;
 
-let token1;
+let token1;//aici o sa stochez token ul creat
+//configurez view urile pt extensia ejs
 app.set('view engine', 'ejs');
-//app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.json());
 app.use(cookieParser());
 
 
 
-//app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(express.urlencoded({ extended: false }))
 dotenv.config(); // get config vars (TOKEN_SECRET)
 let users = [
@@ -41,11 +43,13 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
 app.post("/", (req, res) => {
-    console.log(req.body);
+    //verific daca username ul si parola exista
     if (!req.body.username || !req.body.password) {
         res.status(400).send("Error. Please enter the correct username and password");
         return;
     }
+    //user=1 daca datele sunt la fel cu cele de pe server
+    //user=1 daca datele sunt la fel cu cele de pe server
     const user = users.find((u) => {
         // verificarea datelor de acces
         return u.username === req.body.username && u.password === req.body.password;
@@ -55,20 +59,21 @@ app.post("/", (req, res) => {
         return;
 
     }
+    //creez token ul
     const token = jwt.sign({
         sub: user.id,
         username: user.username
     },
         process.env.TOKEN_SECRET, /* the-secret-key */
-        // { expiresIn: "120s" } /* seconds: 120s, hours: 12h, days: 28d */
+        { expiresIn: "12s" } //token ul e valabil 12 secunde.
     );
-
+    //il salvez pe server
     token1 = token;
     console.log(token1);
     res.status(200).send({ access_token: token })
 
 });
-
+//functia de verficare a token ului
 function authenticateToken(req, res, next) {
 
 
@@ -77,6 +82,7 @@ function authenticateToken(req, res, next) {
 
 
     if (token == null) return res.sendStatus(401)
+
     jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
         if (err) {
             console.log(err.message);
@@ -87,21 +93,14 @@ function authenticateToken(req, res, next) {
         next()
     })
 }
+//permit accesul pe pagina cu ajutorul token ului
 app.get('/exemplu', authenticateToken, (req, res) => {
 
 
     res.render("exemplu.ejs")
 })
 
-// async function FindOne() {
-//     await client.connect();
-//     var dbo = client.db("Account");
-//     var collections = dbo.collection("count");
-//     const querry = { _id: 1 };
-//     var cursor = collections.find(querry);
 
-//     console.log(cursor.token);
-// }
 
 
 

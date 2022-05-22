@@ -13,13 +13,14 @@
         $(document).ready(function () {
             var user, pass;
             $("#submit").click(function () {
-                user = $("#username").val();
-                pass = $("#password").val();
+                user = $("#username").val();//preiau username ul introdus in campul cu id ul username dupa apasarea butonului
+                pass = $("#password").val();//preiau parola introdus in campul cu id ul password dupa apasarea butonului
                 console.log(user);
                 console.log(pass);
+                //le trimit pe server
                 $.post("http://localhost:3000", { username: user, password: pass }, function (data) {
                     //console.log(data);
-                    localStorage.setItem("token", data.access_token)
+
 
 
                 });
