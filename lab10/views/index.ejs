@@ -11,11 +11,12 @@
 
 
         $(document).ready(function () {
-            var user, pass;
+            var numar;//creez o variabila in care sa stochez numarul
             $("#submit").click(function () {
-                user = $("#number").val();
-                console.log(user);
-                $.post("http://localhost:3000/", { number: user }, function (data) {
+                numar = $("#number").val();//preiau numarul introdus in campul cu id ul number dupa apasarea butonului
+                console.log(numar);
+                //il trimit pe server
+                $.post("http://localhost:3000/", { number: numar }, function (data) {
                     //console.log(data);
                 });
             });
